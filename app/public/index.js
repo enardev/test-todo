@@ -20,7 +20,7 @@ function formatDate(date) {
 function toDoRow(toDo) {
     const toDoRow = `
         <tr>
-            <td>${formatDate(toDo.create_at ?? null)}</td>
+            <td>${formatDate(toDo.updated_at ?? null)}</td>
             <td class="to-do-item-content">
                 <span class="to-do-item-text" data-id="${toDo.id}">
                     ${toDo.title ?? ''}

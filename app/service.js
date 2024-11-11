@@ -24,7 +24,7 @@ export default class ToDoService {
     async checkToDo(id) {
         const response = await fetch(`${this.apiHost}:${this.apiPort}/to-do/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ status: 'done' }),
+            body: JSON.stringify({ id, completed: true }),
             headers: {
                 'Content-Type': 'application/json'
             }
