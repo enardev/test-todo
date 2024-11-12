@@ -2,6 +2,7 @@ package todos
 
 type Repository interface {
 	FindAll() ([]ToDo, error)
+	FindByID(string) (ToDo, error)
 	Exists(string) (bool, error)
 	Save(ToDo) error
 	Update(ToDo) error

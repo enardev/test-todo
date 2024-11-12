@@ -12,7 +12,12 @@ func (s *service) Update(todo ToDo) (ToDo, error) {
 		return ToDo{}, ErrToDoNotFound
 	}
 
-	todo.UpdatedAt = time.Now()
+	oldToDo, err := s.repo.FindByID(todo.ID)
+	if err != nil {
+		return ToDo{}, err
+	}
+
+	todo = compareAndReplace(oldToDo, todo)
 
 	err = s.repo.Update(todo)
 	if err != nil {
@@ -20,4 +25,17 @@ func (s *service) Update(todo ToDo) (ToDo, error) {
 	}
 
 	return todo, nil
+}
+
+func compareAndReplace(oldToDo ToDo, newToDo ToDo) ToDo {
+	if newToDo.Title != "" {
+		oldToDo.Title = newToDo.Title
+	}
+
+	if newToDo.Completed != oldToDo.Completed {
+		oldToDo.Completed = newToDo.Completed
+	}
+
+	oldToDo.UpdatedAt = time.Now()
+	return oldToDo
 }
