@@ -1,7 +1,9 @@
 package todos
 
-func (s *service) Delete(id string) error {
-	exists, err := s.repo.Exists(id)
+import "context"
+
+func (s *service) Delete(ctx context.Context, id string) error {
+	exists, err := s.repo.Exists(ctx, id)
 	if err != nil {
 		return ErrDeleteToDo
 	}
@@ -10,7 +12,7 @@ func (s *service) Delete(id string) error {
 		return ErrToDoNotFound
 	}
 
-	err = s.repo.Delete(id)
+	err = s.repo.Delete(ctx, id)
 	if err != nil {
 		return ErrDeleteToDo
 	}

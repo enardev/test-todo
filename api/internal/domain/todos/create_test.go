@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -26,7 +27,7 @@ func TestCreate(t *testing.T) {
 		mockRepo.On("Exists", idMatch).Return(false, nil)
 		mockRepo.On("Save", mock.Anything).Return(nil)
 
-		createdTodo, err := service.Create(todo)
+		createdTodo, err := service.Create(context.Background(), todo)
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, createdTodo.ID)
@@ -47,7 +48,7 @@ func TestCreate(t *testing.T) {
 
 		mockRepo.On("Exists", idMatch).Return(true, nil)
 
-		_, err := service.Create(todo)
+		_, err := service.Create(context.Background(), todo)
 
 		assert.ErrorIs(t, err, ErrToDoAlreadyExists)
 
@@ -64,7 +65,7 @@ func TestCreate(t *testing.T) {
 
 		mockRepo.On("Exists", idMatch).Return(false, errors.New("exists error"))
 
-		_, err := service.Create(todo)
+		_, err := service.Create(context.Background(), todo)
 
 		assert.ErrorIs(t, err, ErrSaveToDo)
 
@@ -81,7 +82,7 @@ func TestCreate(t *testing.T) {
 		mockRepo.On("Exists", idMatch).Return(false, nil)
 		mockRepo.On("Save", mock.Anything).Return(errors.New("save error"))
 
-		_, err := service.Create(todo)
+		_, err := service.Create(context.Background(), todo)
 
 		assert.ErrorIs(t, err, ErrSaveToDo)
 

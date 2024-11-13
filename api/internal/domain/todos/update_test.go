@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -33,7 +34,7 @@ func TestUpdate(t *testing.T) {
 		mockRepo.On("FindByID", idMatch).Return(oldToDo, nil)
 		mockRepo.On("Update", mock.Anything).Return(nil)
 
-		updatedToDo, err := service.Update(todo)
+		updatedToDo, err := service.Update(context.Background(), todo)
 
 		assert.NoError(t, err)
 		assert.Equal(t, todo.Title, updatedToDo.Title)
@@ -52,7 +53,7 @@ func TestUpdate(t *testing.T) {
 
 		mockRepo.On("Exists", idMatch).Return(false, nil)
 
-		_, err := service.Update(todo)
+		_, err := service.Update(context.Background(), todo)
 
 		assert.ErrorIs(t, err, ErrToDoNotFound)
 
@@ -69,7 +70,7 @@ func TestUpdate(t *testing.T) {
 
 		mockRepo.On("Exists", idMatch).Return(false, errors.New("exists error"))
 
-		_, err := service.Update(todo)
+		_, err := service.Update(context.Background(), todo)
 
 		assert.ErrorIs(t, err, ErrUpdateToDo)
 
@@ -87,7 +88,7 @@ func TestUpdate(t *testing.T) {
 		mockRepo.On("Exists", idMatch).Return(true, nil)
 		mockRepo.On("FindByID", idMatch).Return(ToDo{}, errors.New("find error"))
 
-		_, err := service.Update(todo)
+		_, err := service.Update(context.Background(), todo)
 
 		assert.Error(t, err)
 
@@ -111,7 +112,7 @@ func TestUpdate(t *testing.T) {
 		mockRepo.On("FindByID", idMatch).Return(oldToDo, nil)
 		mockRepo.On("Update", mock.Anything).Return(errors.New("update error"))
 
-		_, err := service.Update(todo)
+		_, err := service.Update(context.Background(), todo)
 
 		assert.ErrorIs(t, err, ErrUpdateToDo)
 

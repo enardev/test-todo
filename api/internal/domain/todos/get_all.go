@@ -1,8 +1,10 @@
 package todos
 
-func (s *service) GetAll() ([]ToDo, error) {
+import "context"
 
-	todos, err := s.repo.FindAll()
+func (s *service) GetAll(ctx context.Context) ([]ToDo, error) {
+
+	todos, err := s.repo.FindAll(ctx)
 	if err != nil {
 		return []ToDo{}, ErrToDoNotFound
 	}

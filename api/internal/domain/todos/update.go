@@ -1,9 +1,12 @@
 package todos
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
-func (s *service) Update(todo ToDo) (ToDo, error) {
-	exists, err := s.repo.Exists(todo.ID)
+func (s *service) Update(ctx context.Context, todo ToDo) (ToDo, error) {
+	exists, err := s.repo.Exists(ctx, todo.ID)
 	if err != nil {
 		return ToDo{}, ErrUpdateToDo
 	}
@@ -12,14 +15,14 @@ func (s *service) Update(todo ToDo) (ToDo, error) {
 		return ToDo{}, ErrToDoNotFound
 	}
 
-	oldToDo, err := s.repo.FindByID(todo.ID)
+	oldToDo, err := s.repo.FindByID(ctx, todo.ID)
 	if err != nil {
 		return ToDo{}, err
 	}
 
 	todo = compareAndReplace(oldToDo, todo)
 
-	err = s.repo.Update(todo)
+	err = s.repo.Update(ctx, todo)
 	if err != nil {
 		return ToDo{}, ErrUpdateToDo
 	}

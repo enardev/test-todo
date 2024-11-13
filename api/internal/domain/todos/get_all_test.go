@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -18,7 +19,7 @@ func TestGetAll(t *testing.T) {
 		}
 		mockRepo.On("FindAll").Return(expectedTodos, nil)
 
-		todos, err := service.GetAll()
+		todos, err := service.GetAll(context.Background())
 
 		assert.NoError(t, err)
 		assert.Equal(t, expectedTodos, todos)
@@ -30,7 +31,7 @@ func TestGetAll(t *testing.T) {
 		service := &service{repo: mockRepo}
 		mockRepo.On("FindAll").Return(nil, errors.New("some error"))
 
-		todos, err := service.GetAll()
+		todos, err := service.GetAll(context.Background())
 
 		assert.Error(t, err)
 		assert.Empty(t, todos)

@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -15,7 +16,7 @@ func TestDelete(t *testing.T) {
 		mockRepo.On("Exists", "1").Return(true, nil)
 		mockRepo.On("Delete", "1").Return(nil)
 
-		err := s.Delete("1")
+		err := s.Delete(context.Background(), "1")
 		assert.NoError(t, err)
 
 		mockRepo.AssertExpectations(t)
@@ -27,7 +28,7 @@ func TestDelete(t *testing.T) {
 
 		mockRepo.On("Exists", "2").Return(false, nil)
 
-		err := s.Delete("2")
+		err := s.Delete(context.Background(), "2")
 		assert.Equal(t, ErrToDoNotFound, err)
 
 		mockRepo.AssertExpectations(t)
@@ -39,7 +40,7 @@ func TestDelete(t *testing.T) {
 
 		mockRepo.On("Exists", "3").Return(false, errors.New("exists error"))
 
-		err := s.Delete("3")
+		err := s.Delete(context.Background(), "3")
 		assert.Equal(t, ErrDeleteToDo, err)
 
 		mockRepo.AssertExpectations(t)
@@ -52,7 +53,7 @@ func TestDelete(t *testing.T) {
 		mockRepo.On("Exists", "4").Return(true, nil)
 		mockRepo.On("Delete", "4").Return(errors.New("delete error"))
 
-		err := s.Delete("4")
+		err := s.Delete(context.Background(), "4")
 		assert.Equal(t, ErrDeleteToDo, err)
 
 		mockRepo.AssertExpectations(t)

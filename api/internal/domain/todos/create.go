@@ -1,17 +1,18 @@
 package todos
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-func (s *service) Create(todo ToDo) (ToDo, error) {
+func (s *service) Create(ctx context.Context, todo ToDo) (ToDo, error) {
 	if todo.ID == "" {
 		todo.ID = uuid.New().String()
 	}
 
-	exists, err := s.repo.Exists(todo.ID)
+	exists, err := s.repo.Exists(ctx, todo.ID)
 	if err != nil {
 		return ToDo{}, ErrSaveToDo
 	}
@@ -23,7 +24,7 @@ func (s *service) Create(todo ToDo) (ToDo, error) {
 	todo.CreatedAt = time.Now()
 	todo.UpdatedAt = time.Now()
 
-	err = s.repo.Save(todo)
+	err = s.repo.Save(ctx, todo)
 	if err != nil {
 		return ToDo{}, ErrSaveToDo
 	}

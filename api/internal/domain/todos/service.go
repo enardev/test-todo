@@ -1,19 +1,21 @@
 package todos
 
+import "context"
+
 type Repository interface {
-	FindAll() ([]ToDo, error)
-	FindByID(string) (ToDo, error)
-	Exists(string) (bool, error)
-	Save(ToDo) error
-	Update(ToDo) error
-	Delete(string) error
+	FindAll(context.Context) ([]ToDo, error)
+	FindByID(context.Context, string) (ToDo, error)
+	Exists(context.Context, string) (bool, error)
+	Save(context.Context, ToDo) error
+	Update(context.Context, ToDo) error
+	Delete(context.Context, string) error
 }
 
 type Service interface {
-	GetAll() ([]ToDo, error)
-	Create(ToDo) (ToDo, error)
-	Update(ToDo) (ToDo, error)
-	Delete(string) error
+	GetAll(context.Context) ([]ToDo, error)
+	Create(context.Context, ToDo) (ToDo, error)
+	Update(context.Context, ToDo) (ToDo, error)
+	Delete(context.Context, string) error
 }
 
 type service struct {
