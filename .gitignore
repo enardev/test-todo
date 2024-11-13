@@ -161,3 +161,17 @@ docker-test/*
 
 # deployment image files
 deployment/images/*
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.jar
+*.war
+*.ear
+*.class
+*.log
+*.idea
+*.vscode
